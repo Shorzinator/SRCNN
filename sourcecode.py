@@ -113,3 +113,17 @@ def model():
     SRCNN.compile(optimizer=adam, loss='mean_squared_error', metrics=['mean_squared_error'])
 
     return SRCNN
+
+
+#pre-processing functions
+def modcrop(img, scale):
+    tmpsz = img.shape
+    sz = tmpsz[0:2]
+    sz = sz - np.mod(sz, scale) #  what this is ensuring that our image is going to be divisible by scale.
+    img = img[0:sz[0], 1:sz[1]]
+    return img
+
+
+def shave(image, border):
+    img = image[border: -border, border: -border]  # to even out the borders and make all the images of the same size
+    return img
