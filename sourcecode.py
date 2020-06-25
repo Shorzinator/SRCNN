@@ -178,3 +178,23 @@ def predict(image_path):
 
     # return images and scores
     return ref, degraded, output, scores
+
+
+for file in os.listdir('./SRCNN/images/'):
+   #perform super-resolution
+    ref, degraded, output, scores = predict('./SRCNN/images/{}'.format(file))
+
+
+    # display images as subplots
+    fig, axs = plt.subplots(1, 3, figsize=(20, 8))
+    axs[0].imshow(cv2.cvtColor(ref, cv2.COLOR_BGR2RGB))
+    axs[0].set_title('Original')
+    axs[1].imshow(cv2.cvtColor(degraded, cv2.COLOR_BGR2RGB))
+    axs[1].set_title('Degraded')
+    axs[1].set_xlabel('PSNR: {}\nMSE: {}\nSSIM: {}\n'.format(scores[0][0], scores[0][1], scores[0][2]))
+    axs[2].imshow(cv2.cvtColor(output, cv2.COLOR_BGR2RGB))
+    axs[2].set_title('SRCNN')
+    axs[2].set_xlabel('PSNR: {}\nMSE: {}\nSSIM: {}\n'.format(scores[1][0], scores[1][1], scores[1][2]))
+
+    print('Saving {}'.format(file))
+    fig.savefig('./SRCNN/output/{}.png'.format(os.path.splitext(file)[0]))
