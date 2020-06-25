@@ -19,3 +19,37 @@ from keras.layers import Conv2D, Input
 from keras.optimizers import SGD, Adam
 from skimage.measure import compare_ssim as ssim
 from matplotlib import pyplot as plt
+
+
+#define a function for peak signal to noise ratio
+def psnr(target,ref):
+
+    #assume RGB/BGR image
+    target_data = target.astype(float)
+    ref_data = ref.astype(float)
+
+    diff = ref_data - target_data
+    diff = diff.flatten('C')                                                    #'C' is to flatten in row major, 'F' is to flatten by column major
+
+    rmse = math.sqrt(np.mean(diff ** 2.0))
+
+    return 20 * math.log10(255.0/rmse)
+
+#define function for the mean squared error (MSE)
+def mse(target,ref):
+    err = np.sum((target.astype('float')-ref.astype('float')) ** 2)
+    err /= float(target.shape[0] * target.shape[1])                             #total number of pixels that we have
+
+    # MSE is the sum of the squared difference between the two images
+
+    return err
+
+#define a function that evaluates all three  image quality metrics
+def compare_images(target,ref):
+    scores = []
+    scores.append(psnr(target,ref))
+    scores.append(mse(target,ref))
+    scores.append(ssim(target,ref,multichannel = True))
+    # or scores = [psnr(target, ref), mse(target, ref), ssim(target, ref, multichannel=True)]
+
+    return scores
