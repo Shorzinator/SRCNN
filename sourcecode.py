@@ -53,3 +53,30 @@ def compare_images(target,ref):
     # or scores = [psnr(target, ref), mse(target, ref), ssim(target, ref, multichannel=True)]
 
     return scores
+
+
+#prepare degraded images by introducting quality distortion by resizing images
+def prepare_images(factor):
+    path = './SRCNN/source'
+    #loop through the file in the directory
+    for files in os.listdir(path):
+        #open the file
+        img = cv2.imread(path + '/' + files)
+
+        #find old and new image dimaensions
+        h, w, c = img.shape
+        new_height = h /factor
+        new_width = w / factor
+
+        #resize the image - down
+        img = (cv2.resize(img, (int(new_width), int(new_height)), interpolation=cv2.INTER_LINEAR))
+
+        #resize the image - up
+        img = (cv2.resize(img, (w, h), interpolation = cv2.INTER_LINEAR))
+
+        # save the image
+
+        print('Saving {}'.format(files))
+
+        cv2.imwrite('./SRCNN/images/{}'.format(files), img)
+        
