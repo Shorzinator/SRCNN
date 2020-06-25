@@ -81,3 +81,11 @@ def prepare_images(factor):
         cv2.imwrite('./SRCNN/images/{}'.format(files), img)
 
 prepare_images(2)
+
+#testing the generated images using quality metrics
+
+for file in os.listdir('./SRCNN/images/'):
+    target = cv2.imread('./SRCNN/images/{}'.format(file))
+    ref = cv2.imread('./SRCNN/source/{}'.format(file))
+    scores = compare_images(target, ref)
+    print('{}\n PSNR: {}\n MSE: {}\n SSIM: {}\n'.format(file, scores[0], scores[1], scores[2]))
