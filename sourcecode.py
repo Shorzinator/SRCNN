@@ -79,4 +79,5 @@ def prepare_images(factor):
         print('Saving {}'.format(files))
 
         cv2.imwrite('./SRCNN/images/{}'.format(files), img)
-        
+
+prepare_images(2)
